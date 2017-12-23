@@ -6,6 +6,7 @@ STEXT=0x80000
 
 $(TARGET).img: $(TARGET).elf
 	$(CROSS)objcopy -O binary $< $@
+	mv $@ ../build
 $(TARGET).elf: $(OBJS)
 	$(CROSS)ld -Ttext $(STEXT) -o $(TARGET).elf $+
 .S.o:
