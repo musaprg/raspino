@@ -2,5 +2,7 @@
 
 ARM prototyping environment with RaspberryPi.
 
-# Copyrights
+# References
+
+https://github.com/cupnes/bare_metal_aarch64
 
