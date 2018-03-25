@@ -15,20 +15,45 @@ void printf(char *str){
 	}
 }
 
+int pow(int a, int x){
+	int i,ans=1;
+	for(i=0;i<x;i++){
+		ans*=a;
+	}
+	return ans;
+}
+
+char getchar(){
+	volatile char ch;
+	while (!(MU_LSR & MU_LSR_RX_RDY));
+	ch = (unsigned char)MU_IO;
+	return ch;
+}
+
+int getpsize(){
+	// get program size
+	// format: [digits][data]
+	// eg: 3124 -> 124:int
+
+	volatile char ch;
+	int i,psize;
+
+	ch = getchar();
+
+	for(i=ch-'0'-1;i>=0;i--){
+		psize += (getchar() - '0') * pow(10, i);
+	}
+
+	return psize;
+}
+
 int main(void)
 {
-	volatile char data;
+	volatile char data, ch;
 	volatile unsigned char * p = (volatile unsigned char *)ENTRY_ADDRESS;
-	int i, psize = 0;
+	int i,psize;
 
-	// get program size
-	while (!(MU_LSR & MU_LSR_RX_RDY));
-	psize = (int)MU_IO;
-
-	if (psize == 0) { // if psize is yet zero, return "Error" message.
-		printf("Error");
-		while(1);	
-	}
+	psize = getpsize();
 
 	for(i=0;i<psize;i++) {
 		while (!(MU_LSR & MU_LSR_RX_RDY));
